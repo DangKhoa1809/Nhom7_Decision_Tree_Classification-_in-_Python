@@ -6,19 +6,19 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 import matplotlib.pyplot as plt
 
-# ================== CẤU HÌNH TRANG ==================
+# Giao diện trang
 st.set_page_config(
     page_title="Phân loại bệnh tiểu đường",
-    page_icon="🩺",
+    page_icon="",
     layout="wide"
 )
 
-st.title("🩺 PHÂN LOẠI BỆNH TIỂU ĐƯỜNG BẰNG CÂY QUYẾT ĐỊNH")
+st.title("PHÂN LOẠI BỆNH TIỂU ĐƯỜNG BẰNG CÂY QUYẾT ĐỊNH")
 st.caption("Mô hình Decision Tree – dữ liệu giả lập Pima Diabetes")
 st.markdown("---")
 
-# ================== TẠO DỮ LIỆU ==================
-st.header("1️⃣ Tạo dữ liệu giả lập")
+# Tạo dữ liệu
+st.header("Tạo dữ liệu giả lập")
 
 np.random.seed(1)
 n_samples = 768
@@ -52,11 +52,11 @@ col1, col2 = st.columns(2)
 col1.metric("Số mẫu", pima.shape[0])
 col2.metric("Số thuộc tính", pima.shape[1] - 1)
 
-with st.expander("📊 Xem 5 dòng dữ liệu đầu tiên"):
+with st.expander("Xem 5 dòng dữ liệu đầu tiên"):
     st.dataframe(pima.head(), use_container_width=True)
 
-# ================== PHÂN BỐ NHÃN ==================
-st.header("2️⃣ Phân bố nhãn")
+# Phân bố nhãn
+st.header("Phân bố nhãn")
 
 label_counts = pima["label"].value_counts()
 st.dataframe(label_counts.to_frame("Số lượng"))
@@ -71,8 +71,8 @@ label_counts.plot(
 )
 st.pyplot(fig1)
 
-# ================== CHỌN THUỘC TÍNH ==================
-st.header("3️⃣ Thuộc tính & tập dữ liệu")
+# Chọn thuộc tính
+st.header("Thuộc tính & tập dữ liệu")
 
 feature_cols = ["pregnant", "insulin", "bmi", "age", "glucose", "bp", "pedigree"]
 X = pima[feature_cols]
@@ -81,8 +81,8 @@ y = pima["label"]
 st.write("**Các thuộc tính sử dụng:**")
 st.write(", ".join(feature_cols))
 
-# ================== TRAIN / TEST ==================
-st.header("4️⃣ Chia dữ liệu & huấn luyện mô hình")
+# Train & Test
+st.header("Chia dữ liệu & huấn luyện mô hình")
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.3, random_state=1
@@ -100,8 +100,8 @@ clf = DecisionTreeClassifier(
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 
-# ================== ĐÁNH GIÁ ==================
-st.header("5️⃣ Đánh giá mô hình")
+# Đánh giá
+st.header("Đánh giá mô hình")
 
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Criterion", clf.criterion)
@@ -109,9 +109,9 @@ col2.metric("Max depth", clf.max_depth)
 col3.metric("Độ sâu thực tế", clf.get_depth())
 col4.metric("Số nút lá", clf.get_n_leaves())
 
-st.success(f"🎯 Accuracy: {accuracy_score(y_test, y_pred):.2%}")
+st.success(f"Accuracy: {accuracy_score(y_test, y_pred):.2%}")
 
-with st.expander("📌 Confusion Matrix"):
+with st.expander("Confusion Matrix"):
     cm_df = pd.DataFrame(
         confusion_matrix(y_test, y_pred),
         columns=["Dự đoán 0", "Dự đoán 1"],
@@ -119,19 +119,19 @@ with st.expander("📌 Confusion Matrix"):
     )
     st.dataframe(cm_df)
 
-with st.expander("📌 Classification Report"):
+with st.expander("Classification Report"):
     st.text(classification_report(y_test, y_pred, target_names=["Không bệnh", "Bị bệnh"]))
 
-# ================== SO SÁNH ==================
-st.header("6️⃣ So sánh nhãn thực tế & dự đoán")
+# So sánh
+st.header("So sánh nhãn thực tế & dự đoán")
 compare_df = pd.DataFrame({
     "Thực tế": y_test.values[:10],
     "Dự đoán": y_pred[:10]
 })
 st.dataframe(compare_df)
 
-# ================== CÂY QUYẾT ĐỊNH ==================
-st.header("7️⃣ Trực quan hóa cây quyết định")
+# Cây quyết định
+st.header("Trực quan hóa cây quyết định")
 
 fig2, ax2 = plt.subplots(figsize=(22, 10))
 plot_tree(
@@ -145,10 +145,10 @@ plot_tree(
 )
 st.pyplot(fig2)
 
-# ================== DỰ ĐOÁN NGƯỜI DÙNG NHẬP ==================
-st.header("8️⃣ Dự đoán cho bệnh nhân (người dùng nhập dữ liệu)")
+# Người dùng nhập chỉ số để dự đoán bệnh
+st.header("Dự đoán cho bệnh nhân (Vui lòng nhập các chỉ số dưới đây)")
 
-st.write("👉 Nhập các chỉ số y tế của bệnh nhân:")
+st.write("Nhập các chỉ số y tế của bệnh nhân:")
 
 col1, col2 = st.columns(2)
 
@@ -174,18 +174,18 @@ input_patient = pd.DataFrame({
     "pedigree": [pedigree]
 })
 
-st.subheader("📋 Thông tin bệnh nhân")
+st.subheader("Thông tin bệnh nhân")
 st.dataframe(input_patient, use_container_width=True)
 
 # Nút dự đoán
-if st.button("🔍 Dự đoán bệnh tiểu đường"):
+if st.button("Dự đoán bệnh tiểu đường"):
     prediction = clf.predict(input_patient)
     probability = clf.predict_proba(input_patient)
 
     if prediction[0] == 1:
-        st.error("❌ KẾT LUẬN: CÓ NGUY CƠ BỊ BỆNH TIỂU ĐƯỜNG")
+        st.error("KẾT LUẬN: CÓ NGUY CƠ BỊ BỆNH TIỂU ĐƯỜNG")
     else:
-        st.success("✅ KẾT LUẬN: KHÔNG CÓ NGUY CƠ BỊ BỆNH TIỂU ĐƯỜNG")
+        st.success("KẾT LUẬN: KHÔNG CÓ NGUY CƠ BỊ BỆNH TIỂU ĐƯỜNG")
 
     st.write("**Xác suất dự đoán:**")
     st.write(f"- Không bệnh: {probability[0][0]:.2%}")
