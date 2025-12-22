@@ -145,29 +145,48 @@ plot_tree(
 )
 st.pyplot(fig2)
 
-# ================== DỰ ĐOÁN MẪU ==================
-st.header("8️⃣ Dự đoán cho bệnh nhân mẫu")
+# ================== DỰ ĐOÁN NGƯỜI DÙNG NHẬP ==================
+st.header("8️⃣ Dự đoán cho bệnh nhân (người dùng nhập dữ liệu)")
 
-new_patient = pd.DataFrame({
-    "pregnant": [2],
-    "insulin": [120],
-    "bmi": [32.5],
-    "age": [45],
-    "glucose": [150],
-    "bp": [85],
-    "pedigree": [0.6]
+st.write("👉 Nhập các chỉ số y tế của bệnh nhân:")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    pregnant = st.number_input("Số lần mang thai", min_value=0, max_value=20, value=1)
+    insulin = st.number_input("Insulin (µU/mL)", min_value=0, max_value=400, value=120)
+    bmi = st.number_input("BMI", min_value=10.0, max_value=60.0, value=32.5)
+    age = st.number_input("Tuổi", min_value=1, max_value=100, value=45)
+
+with col2:
+    glucose = st.number_input("Glucose (mg/dL)", min_value=50, max_value=300, value=150)
+    bp = st.number_input("Huyết áp (mmHg)", min_value=30, max_value=200, value=85)
+    pedigree = st.number_input("Chỉ số di truyền", min_value=0.0, max_value=5.0, value=0.6)
+
+# Tạo dataframe từ input
+input_patient = pd.DataFrame({
+    "pregnant": [pregnant],
+    "insulin": [insulin],
+    "bmi": [bmi],
+    "age": [age],
+    "glucose": [glucose],
+    "bp": [bp],
+    "pedigree": [pedigree]
 })
 
-prediction = clf.predict(new_patient)
-probability = clf.predict_proba(new_patient)
+st.subheader("📋 Thông tin bệnh nhân")
+st.dataframe(input_patient, use_container_width=True)
 
-st.dataframe(new_patient)
+# Nút dự đoán
+if st.button("🔍 Dự đoán bệnh tiểu đường"):
+    prediction = clf.predict(input_patient)
+    probability = clf.predict_proba(input_patient)
 
-if prediction[0] == 1:
-    st.error("❌ KẾT LUẬN: BỊ BỆNH TIỂU ĐƯỜNG")
-else:
-    st.success("✅ KẾT LUẬN: KHÔNG BỊ BỆNH TIỂU ĐƯỜNG")
+    if prediction[0] == 1:
+        st.error("❌ KẾT LUẬN: CÓ NGUY CƠ BỊ BỆNH TIỂU ĐƯỜNG")
+    else:
+        st.success("✅ KẾT LUẬN: KHÔNG CÓ NGUY CƠ BỊ BỆNH TIỂU ĐƯỜNG")
 
-st.write("**Xác suất:**")
-st.write(f"- Không bệnh: {probability[0][0]:.2%}")
-st.write(f"- Bị bệnh  : {probability[0][1]:.2%}")
+    st.write("**Xác suất dự đoán:**")
+    st.write(f"- Không bệnh: {probability[0][0]:.2%}")
+    st.write(f"- Bị bệnh  : {probability[0][1]:.2%}")
