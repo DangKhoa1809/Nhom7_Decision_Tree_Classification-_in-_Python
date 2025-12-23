@@ -120,7 +120,17 @@ with st.expander("Confusion Matrix"):
     st.dataframe(cm_df)
 
 with st.expander("Classification Report"):
-    st.text(classification_report(y_test, y_pred, target_names=["Không bệnh", "Bị bệnh"]))
+    report_dict = classification_report(
+        y_test,
+        y_pred,
+        target_names=["Không bệnh", "Bị bệnh"],
+        output_dict=True
+    )
+
+    report_df = pd.DataFrame(report_dict).transpose()
+    report_df = report_df.round(3)
+
+    st.dataframe(report_df, use_container_width=True)
 
 # Cây quyết định
 st.header("Trực quan hóa cây quyết định")
