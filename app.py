@@ -137,16 +137,22 @@ plot_tree(
 )
 st.pyplot(fig2)
 
-# Nhập liệu
-st.sidebar.header("Thông tin bệnh nhân")
+# Nhập thông tin các chỉ số của bệnh nhân
+st.header("Dự đoán cho bệnh nhân")
+st.write("Nhập các thông tin y tế của bệnh nhân để hệ thống dự đoán:")
 
-pregnant = st.sidebar.number_input("Số lần mang thai", 0, 20, 1)
-insulin = st.sidebar.number_input("Insulin (µU/mL)", 0, 400, 120)
-bmi = st.sidebar.number_input("BMI", 10.0, 60.0, 32.5)
-age = st.sidebar.number_input("Tuổi", 1, 100, 45)
-glucose = st.sidebar.number_input("Glucose (mg/dL)", 50, 300, 150)
-bp = st.sidebar.number_input("Huyết áp (mmHg)", 30, 200, 85)
-pedigree = st.sidebar.number_input("Chỉ số di truyền", 0.0, 5.0, 0.6)
+col1, col2 = st.columns(2)
+
+with col1:
+    pregnant = st.number_input("Số lần mang thai", 0, 20, 1)
+    insulin = st.number_input("Insulin (µU/mL)", 0, 400, 120)
+    bmi = st.number_input("BMI", 10.0, 60.0, 32.5)
+    age = st.number_input("Tuổi", 1, 100, 45)
+
+with col2:
+    glucose = st.number_input("Glucose (mg/dL)", 50, 300, 150)
+    bp = st.number_input("Huyết áp (mmHg)", 30, 200, 85)
+    pedigree = st.number_input("Chỉ số di truyền", 0.0, 5.0, 0.6)
 
 input_patient = pd.DataFrame({
     "pregnant": [pregnant],
@@ -158,7 +164,7 @@ input_patient = pd.DataFrame({
     "pedigree": [pedigree]
 })
 
-st.header("Dự đoán cho bệnh nhân")
+st.subheader("Thông tin bệnh nhân")
 st.dataframe(input_patient, use_container_width=True)
 
 if st.button("Dự đoán"):
