@@ -8,13 +8,13 @@ import matplotlib.pyplot as plt
 
 # Giao diện trang
 st.set_page_config(
-    page_title="Phân loại bệnh tiểu đường",
+    page_title="Dự đoán bệnh tiểu đường",
     layout="wide"
 )
 
 # Header
 st.markdown("""
-<h1 style="text-align:center;">PHÂN LOẠI BỆNH TIỂU ĐƯỜNG</h1>
+<h1 style="text-align:center;">DỰ ĐOÁN BỆNH TIỂU ĐƯỜNG</h1>
 <h4 style="text-align:center; color:gray;">
 Mô hình Decision Tree – Dữ liệu giả lập Pima Diabetes
 </h4>
